@@ -30,7 +30,6 @@ services:
     ports:
       - '3000:3000'
     environment:
-      - SONARR_BRANCH=master
       - PUID=0
       - PGID=101
       - TZ=Europe/Berlin
