@@ -1,0 +1,39 @@
+version: '2'
+services:
+  nzbget:
+    image: linuxserver/nzbget
+    container_name: nzbget
+    privileged: false
+    restart: always
+    network_mode: bridge
+    mem_swappiness: -1 # temp workaround
+    ports:
+      - '6789:6789'
+    environment:
+      - SONARR_BRANCH=master
+      - PUID=0
+      - PGID=101
+      - TZ=Europe/Berlin
+    volumes:
+      - '/volume1/docker/nzbget:/config'
+      - '/volume1/downloads:/downloads'
+  sonarr:
+    image: linuxserver/sonarr
+    container_name: sonarr
+    privileged: false
+    restart: always
+    network_mode: bridge
+    links:
+      - nzbget
+    mem_swappiness: -1 # temp workaround
+    ports:
+      - '8989:8989'
+    environment:
+      - SONARR_BRANCH=master
+      - PUID=0
+      - PGID=101
+      - TZ=Europe/Berlin
+    volumes:
+      - '/volume1/docker/sonarr:/config'
+      - '/volume1/downloads:/downloads'
+      - '/volume1/video/tv:/tv'
