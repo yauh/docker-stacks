@@ -1,0 +1,60 @@
+version: '2'
+services:
+  influxdb:
+    image: influxdb
+    container_name: influxdb
+    privileged: false
+    restart: always
+    network_mode: bridge
+    mem_swappiness: -1 # temp workaround
+    ports:
+      - '8082:8082'
+      - '8086:8086'
+      - '8089:8089'
+    environment:
+      - PUID=0
+      - PGID=101
+      - TZ=Europe/Berlin
+    volumes:
+      - '/volume1/docker/influxdb:/var/lib/influxdb'
+      - '/volume1/downloads:/downloads'
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    privileged: false
+    restart: always
+    network_mode: bridge
+    links:
+      - influxdb
+    mem_swappiness: -1 # temp workaround
+    ports:
+      - '3000:3000'
+    environment:
+      - SONARR_BRANCH=master
+      - PUID=0
+      - PGID=101
+      - TZ=Europe/Berlin
+      - PATH=/usr/share/grafana/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      - GF_PATHS_CONFIG=/etc/grafana/grafana.ini
+      - GF_PATHS_DATA=/var/lib/grafana
+      - GF_PATHS_HOME=/usr/share/grafana
+      - GF_PATHS_LOGS=/var/log/grafana
+      - GF_PATHS_PLUGINS=/var/lib/grafana/plugins
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+    volumes:
+      - '/volume1/docker/grafana:/var/lib/grafana'
+  mosquitto:
+    image: eclipse-mosquitto
+    container_name: mosquitto
+    privileged: false
+    restart: always
+    network_mode: bridge
+    mem_swappiness: -1 # temp workaround
+    ports:
+      - '1883:1883'
+    environment:
+      - PUID=0
+      - PGID=101
+      - TZ=Europe/Berlin
+    volumes:
+      - '/volume1/docker/mosquitto:/mosquitto'
