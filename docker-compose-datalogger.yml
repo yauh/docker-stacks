@@ -42,6 +42,23 @@ services:
       - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
     volumes:
       - '/volume1/docker/grafana:/var/lib/grafana'
+  telegraf:
+    image: telegraf
+    container_name: telegraf
+    privileged: false
+    restart: always
+    network_mode: bridge
+    links:
+      - influxdb
+      - grafana
+    mem_swappiness: -1 # temp workaround
+    environment:
+      - PUID=0
+      - PGID=101
+      - TZ=Europe/Berlin
+    volumes:
+      - '/volume1/docker/telegraf/mibs:/usr/share/snmp/mibs'
+      - '/volume1/docker/telegraf/config:/etc/telegraf'
   mosquitto:
     image: eclipse-mosquitto
     container_name: mosquitto
