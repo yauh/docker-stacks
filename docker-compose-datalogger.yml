@@ -57,7 +57,6 @@ services:
       - PGID=101
       - TZ=Europe/Berlin
     volumes:
-      - '/volume1/docker/telegraf/mibs:/usr/share/snmp/mibs'
       - '/volume1/docker/telegraf/config:/etc/telegraf'
   mosquitto:
     image: eclipse-mosquitto
