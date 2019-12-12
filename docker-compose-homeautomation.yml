@@ -29,8 +29,23 @@ services:
     environment:
       - PUID=0
       - PGID=101
-      - DCONZ_WEB_PORT=8880
-      - DCONZ_WS_PORT=8443
+      - DECONZ_WEB_PORT=8880
+      - DECONZ_WS_PORT=8443
       - TZ=Europe/Berlin
     volumes:
       - '/volume1/docker/deconz:/root/.local/share/dresden-elektronik/deCONZ'
+  homebridge:
+    image: oznu/homebridge
+    container_name: homebridge
+    privileged: false
+    restart: always
+    network_mode: host
+    mem_swappiness: -1 # temp workaround
+    environment:
+      - PUID=0
+      - PGID=101
+      - HOMEBRIDGE_CONFIG_UI=1
+      - HOMEBRIDGE_CONFIG_UI_PORT=8881
+      - TZ=Europe/Berlin
+    volumes:
+      - '/volume1/docker/homebridge:/homebridge'
